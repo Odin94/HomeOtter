@@ -1,7 +1,8 @@
 plugins {
-	id 'org.springframework.boot' version '2.1.3.RELEASE'
-	id 'org.jetbrains.kotlin.jvm' version '1.2.71'
-	id 'org.jetbrains.kotlin.plugin.spring' version '1.2.71'
+    id 'org.springframework.boot' version '2.1.3.RELEASE'
+    id 'org.jetbrains.kotlin.jvm' version '1.2.71'
+    id 'org.jetbrains.kotlin.plugin.spring' version '1.2.71'
+    id 'com.moowork.node' version '1.2.0'
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -11,34 +12,56 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
 //	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 //	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-websocket'
-	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
-	implementation 'org.jetbrains.kotlin:kotlin-reflect'
-	implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
-	implementation 'org.springframework.session:spring-session-core'
-	runtimeOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'org.postgresql:postgresql'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
+    implementation 'org.jetbrains.kotlin:kotlin-reflect'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    implementation 'org.springframework.session:spring-session-core'
+    runtimeOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'org.postgresql:postgresql'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //	testImplementation 'org.springframework.security:spring-security-test'
 }
 
 compileKotlin {
-	kotlinOptions {
-		freeCompilerArgs = ['-Xjsr305=strict']
-		jvmTarget = '1.8'
-	}
+    kotlinOptions {
+        freeCompilerArgs = ['-Xjsr305=strict']
+        jvmTarget = '1.8'
+    }
 }
 
 compileTestKotlin {
-	kotlinOptions {
-		freeCompilerArgs = ['-Xjsr305=strict']
-		jvmTarget = '1.8'
-	}
+    kotlinOptions {
+        freeCompilerArgs = ['-Xjsr305=strict']
+        jvmTarget = '1.8'
+    }
 }
+
+// Task for installing frontend dependencies in web
+task installDependencies(type: NpmTask) {
+    args = ['install']
+    execOverrides {
+        it.workingDir = '../frontend'
+    }
+}
+
+// Task for executing build:gradle in web
+task buildWeb(type: NpmTask) {
+    args = ['run', 'build:gradle']
+    execOverrides {
+        it.workingDir = '../frontend'
+    }
+}
+
+// Before buildWeb can run, installDependencies must run
+buildWeb.dependsOn installDependencies
+
+// Before build can run, buildWeb must run
+build.dependsOn buildWeb
