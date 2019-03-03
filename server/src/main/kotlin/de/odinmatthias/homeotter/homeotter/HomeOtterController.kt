@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController()
 class HomeOtterController @Autowired constructor(
-        private val exampleService: HomeOtterService
+        private val homeOtterService: HomeOtterService
 ) {
     @GetMapping("/api/hello", produces = ["application/json"])
-    fun example() = exampleService.getSomeValue()
+    fun example() = homeOtterService.getSomeValue()
 }

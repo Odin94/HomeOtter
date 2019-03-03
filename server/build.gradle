@@ -3,9 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.2.71'
     id 'org.jetbrains.kotlin.plugin.spring' version '1.2.71'
     id 'com.moowork.node' version '1.2.0'
+    id 'io.spring.dependency-management' version '1.0.7.RELEASE'
 }
-
-apply plugin: 'io.spring.dependency-management'
 
 group = 'de.odin-matthias'
 version = '0.0.1-SNAPSHOT'
@@ -13,6 +12,7 @@ sourceCompatibility = '1.8'
 
 repositories {
     mavenCentral()
+    maven { url = "https://plugins.gradle.org/m2/" }
 }
 
 dependencies {
@@ -28,6 +28,15 @@ dependencies {
     runtimeOnly 'org.postgresql:postgresql'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //	testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.jetbrains.spek:spek-api:1.1.5'
+    testImplementation 'com.natpryce:hamkrest:1.7.0.0'
+//    testImplementation 'com.nhaarman:mockito-kotlin:1.6.0'
+    testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0'
+    testRuntime 'org.jetbrains.spek:spek-junit-platform-engine:1.1.5'
+}
+
+test {
+    useJUnitPlatform()
 }
 
 compileKotlin {
