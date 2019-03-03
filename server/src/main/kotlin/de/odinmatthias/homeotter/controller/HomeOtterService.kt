@@ -1,4 +1,4 @@
-package de.odinmatthias.homeotter.homeotter
+package de.odinmatthias.homeotter.controller
 
 import org.springframework.stereotype.Service
 

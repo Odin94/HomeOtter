@@ -1,4 +1,4 @@
-package de.odinmatthias.homeotter.homeotter
+package de.odinmatthias.homeotter.controller
 
 import com.natpryce.hamkrest.and
 import com.natpryce.hamkrest.assertion.assertThat
@@ -15,7 +15,7 @@ object HomeOtterServiceSpec : Spek({
         it("should return the correct value") {
             val value = homeOtterService.getSomeValue()
 
-            assertThat(value.message, equalTo("Hello World!") and startsWith("Hello"))
+            assertThat(value.message, equalTo("Hello Service!") and startsWith("Hello"))
         }
 
         it("should not return the not correct value") {
