@@ -4,6 +4,9 @@
 **/build/
 **/!gradle/wrapper/gradle-wrapper.jar
 
+## Secrets ##
+**/application.properties
+
 ### STS ###
 .apt_generated
 .classpath
