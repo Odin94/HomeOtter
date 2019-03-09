@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import '../scss/HeaderMenu.scss';
-import logo_red from '../resources/home_otter_red.png';
+import logo_red from '../resources/home_otter_red_background.png';
+import SimpleImage from './SimpleImage'
 
 import {
     Alignment,
@@ -12,6 +13,7 @@ import {
     NavbarGroup,
     NavbarHeading,
     Switch,
+    Icon,
 } from "@blueprintjs/core";
 import '@blueprintjs/core/lib/css/blueprint.css';
 
@@ -23,12 +25,14 @@ class HeaderMenu extends Component {
                 <Navbar className="navbar">
                     <Navbar.Group align={Alignment.LEFT}>
                         <Navbar.Heading>
-                            <img src={logo_red} alt="Logo" />
+                            <a href="/">
+                                <SimpleImage src={logo_red} />
+                            </a>
                         </Navbar.Heading>
                     </Navbar.Group>
                     <Navbar.Group align={Alignment.RIGHT}>
-                        <Button className="bp3-minimal" icon="home" text="Home" />
-                        <Button className="bp3-minimal" icon="document" text="Files" />
+                        <Button className="bp3-minimal" icon={<Icon icon="new-person" iconSize={20} />} text="Register" />
+                        <Button className="bp3-minimal" icon={<Icon icon="log-in" iconSize={20} />} text="Login" />
                     </Navbar.Group>
                 </Navbar>
             </header>
