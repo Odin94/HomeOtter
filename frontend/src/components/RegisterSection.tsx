@@ -22,7 +22,7 @@ class RegisterSection extends Component {
                         <InputGroup leftIcon="person" id="lastname-input" placeholder="Last Name" />
                     </FormGroup>
                     <FormGroup>
-                        <InputGroup leftIcon="lock" id="text-input" placeholder="Password" />
+                        <InputGroup leftIcon="lock" id="text-input" placeholder="Password" type="password" />
                     </FormGroup>
 
                     <Button type="submit" fill>Register</Button>
