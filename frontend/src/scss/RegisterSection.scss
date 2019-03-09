@@ -1,0 +1,40 @@
+@import "./shared.scss";
+
+#register-section {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+.bp3-card {
+    width: 50%;
+    margin: auto;
+
+    h1 {
+        margin-top: -10px;
+        text-align: left;
+        color: $primary-color;
+    }
+
+    .bp3-button {
+        background-color: $primary-color !important;
+        background-image: none !important;
+
+        &:hover {
+            background-color: $primary-color-light !important;
+        }
+
+        &:active {
+            background-color: $primary-color-dark !important;
+        }
+
+        .bp3-button-text {
+            color: white;
+            font-weight: bold;
+        }
+    }
+
+    @media screen and (max-width: 1000px) {
+        width: 80%;
+    }
+}

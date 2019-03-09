@@ -15,7 +15,6 @@ import {
     Switch,
     Icon,
 } from "@blueprintjs/core";
-import '@blueprintjs/core/lib/css/blueprint.css';
 
 class HeaderMenu extends Component {
 

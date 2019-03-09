@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import LandingSection from './components/LandingSection';
 import './scss/App.scss';
+import Register from './components/RegisterSection';
+import RegisterSection from './components/RegisterSection';
 
 class App extends Component {
   state = {
@@ -23,6 +25,7 @@ class App extends Component {
     return (
       <div id="app">
         <LandingSection />
+        <RegisterSection />
       </div>
     );
   }
