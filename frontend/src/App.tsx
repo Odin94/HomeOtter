@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import HeaderMenu from './components/HeaderMenu';
-import './App.css';
-import Layout from 'antd/lib/layout';
+import LandingSection from './components/LandingSection';
+import './scss/App.scss';
 
 class App extends Component {
   state = {
@@ -22,10 +21,9 @@ class App extends Component {
 
   render() {
     return (
-      <Layout className="App">
-        <HeaderMenu />
-        {/* <Main /> */}
-      </Layout>
+      <div id="app">
+        <LandingSection />
+      </div>
     );
   }
 }

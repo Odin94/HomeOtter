@@ -1,29 +1,36 @@
 import React, { Component } from 'react';
-import '../App.css';
-import 'antd/dist/antd.css';
+import '../scss/HeaderMenu.scss';
 
-import Menu from 'antd/lib/menu';
-import Layout from 'antd/lib/layout';
-
-const { Header, Content, Footer } = Layout;
+import {
+    Alignment,
+    Button,
+    Classes,
+    H5,
+    Navbar,
+    NavbarDivider,
+    NavbarGroup,
+    NavbarHeading,
+    Switch,
+} from "@blueprintjs/core";
+import '@blueprintjs/core/lib/css/blueprint.css';
 
 class HeaderMenu extends Component {
 
     render() {
         return (
-            <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
-                <div className="logo" />
-                <Menu
-                    theme="dark"
-                    mode="horizontal"
-                    defaultSelectedKeys={['2']}
-                    style={{ lineHeight: '64px' }}
-                >
-                    <Menu.Item key="1">nav 1</Menu.Item>
-                    <Menu.Item key="2">nav 2</Menu.Item>
-                    <Menu.Item key="3">nav 3</Menu.Item>
-                </Menu>
-            </Header>
+            <header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+                <Navbar className="navbar">
+                    <Navbar.Group align={Alignment.LEFT}>
+                        <Navbar.Heading>
+                            <Button className="bp3-minimal" icon="home" text="Home" />
+                        </Navbar.Heading>
+                    </Navbar.Group>
+                    <Navbar.Group align={Alignment.RIGHT}>
+                        <Button className="bp3-minimal" icon="home" text="Home" />
+                        <Button className="bp3-minimal" icon="document" text="Files" />
+                    </Navbar.Group>
+                </Navbar>
+            </header>
         );
     }
 }
