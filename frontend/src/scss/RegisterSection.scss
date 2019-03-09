@@ -7,7 +7,7 @@
 }
 
 .bp3-card {
-    width: 50%;
+    width: 600px;
     margin: auto;
 
     h1 {
@@ -34,7 +34,7 @@
         }
     }
 
-    @media screen and (max-width: 1000px) {
-        width: 80%;
+    @media screen and (max-width: 700px) {
+        width: 90%;
     }
 }
