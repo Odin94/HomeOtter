@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import '../scss/HeaderMenu.scss';
+import logo_red from '../resources/home_otter_red.png';
 
 import {
     Alignment,
@@ -22,7 +23,7 @@ class HeaderMenu extends Component {
                 <Navbar className="navbar">
                     <Navbar.Group align={Alignment.LEFT}>
                         <Navbar.Heading>
-                            <Button className="bp3-minimal" icon="home" text="Home" />
+                            <img src={logo_red} alt="Logo" />
                         </Navbar.Heading>
                     </Navbar.Group>
                     <Navbar.Group align={Alignment.RIGHT}>
