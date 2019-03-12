@@ -60,7 +60,21 @@ class RegisterSection extends Component<RegisterSectionProps, RegisterSectionSta
     }
 
     submitForm(): Promise<boolean> {
-
+        return fetch('/user_api/users', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: this.state.email,
+                firstName: this.state.firstName,
+                lastName: this.state.lastName,
+                passwordHash: this.state.password,
+            })
+        }).then((response: Response) => {
+            return response.status === 200;
+        });
     }
 
     render() {
