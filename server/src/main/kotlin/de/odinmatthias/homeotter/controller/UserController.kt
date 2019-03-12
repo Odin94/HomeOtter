@@ -31,7 +31,10 @@ class UserController(
 
         return userRepository.findById(UserId).map { existingUser ->
             val updatedHomeOtterUser: HomeOtterUser = existingUser
-                    .copy(name = newHomeOtterUser.name, passwordHash = newHomeOtterUser.passwordHash)
+                    .copy(email = newHomeOtterUser.email,
+                            firstName = newHomeOtterUser.firstName,
+                            lastName = newHomeOtterUser.lastName,
+                            passwordHash = newHomeOtterUser.passwordHash)
             ResponseEntity.ok().body(userRepository.save(updatedHomeOtterUser))
         }.orElse(ResponseEntity.notFound().build())
 

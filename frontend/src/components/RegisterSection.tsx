@@ -5,27 +5,85 @@ import {
     FormGroup, InputGroup, Card, Button, Elevation,
 } from "@blueprintjs/core";
 
-class RegisterSection extends Component {
+interface RegisterSectionProps { }
+
+interface RegisterSectionState {
+    email: string,
+    firstName: string,
+    lastName: string,
+    password: string,
+    submitSuccessful: boolean | null
+}
+
+class RegisterSection extends Component<RegisterSectionProps, RegisterSectionState> {
+
+    constructor(props: RegisterSectionProps) {
+        super(props);
+        this.state = {
+            email: "",
+            firstName: "",
+            lastName: "",
+            password: "",
+            submitSuccessful: null
+        }
+
+        this.onInputChange = this.onInputChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
+    }
+
+    onInputChange(event: React.FormEvent<HTMLInputElement>) {
+        const target = event.currentTarget;
+
+        console.log(`${target.name}: ${target.value}`);
+
+        if (["email", "firstName", "lastName", "password"].includes(target.name)) {
+            // @ts-ignore
+            this.setState({
+                [target.name]: target.value
+            });
+        } else {
+            console.log(`Can't assign name "${target.name}" to form.`);
+        }
+    }
+
+    onSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+        e.preventDefault();
+
+        if (this.validateForm()) {
+            const submitSuccessful = await this.submitForm();
+            this.setState({ ...this.state, submitSuccessful });
+        }
+    };
+
+    validateForm(): boolean {
+        return true;
+    }
+
+    submitForm(): Promise<boolean> {
+
+    }
 
     render() {
         return (
             <section id="register-section">
                 <Card elevation={Elevation.ONE}>
-                    <h1>Register</h1>
-                    <FormGroup>
-                        <InputGroup leftIcon="envelope" id="email-input" placeholder="Email Address" />
-                    </FormGroup>
-                    <FormGroup>
-                        <InputGroup leftIcon="person" id="firstname-input" placeholder="First Name" />
-                    </FormGroup>
-                    <FormGroup>
-                        <InputGroup leftIcon="person" id="lastname-input" placeholder="Last Name" />
-                    </FormGroup>
-                    <FormGroup>
-                        <InputGroup leftIcon="lock" id="text-input" placeholder="Password" type="password" />
-                    </FormGroup>
+                    <form onSubmit={this.onSubmit}>
+                        <h1>Register</h1>
+                        <FormGroup>
+                            <InputGroup name="email" value={this.state.email} onChange={this.onInputChange} leftIcon="envelope" id="email-input" placeholder="Email Address" />
+                        </FormGroup>
+                        <FormGroup>
+                            <InputGroup name="firstName" value={this.state.firstName} onChange={this.onInputChange} leftIcon="person" id="firstname-input" placeholder="First Name" />
+                        </FormGroup>
+                        <FormGroup>
+                            <InputGroup name="lastName" value={this.state.lastName} onChange={this.onInputChange} leftIcon="person" id="lastname-input" placeholder="Last Name" />
+                        </FormGroup>
+                        <FormGroup>
+                            <InputGroup name="password" value={this.state.password} onChange={this.onInputChange} leftIcon="lock" id="text-input" placeholder="Password" type="password" />
+                        </FormGroup>
 
-                    <Button type="submit" fill>Register</Button>
+                        <Button type="submit" fill>Register</Button>
+                    </form>
                 </Card>
 
             </section >

@@ -13,7 +13,12 @@ data class HomeOtterUser(
         val id: Long = 0,
 
         @get: NotBlank
-        val name: String = "",
+        val email: String = "",
+
+        @get: NotBlank
+        val firstName: String = "",
+        @get: NotBlank
+        val lastName: String = "",
 
         @get: NotBlank
         val passwordHash: String = ""

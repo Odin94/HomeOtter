@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 export interface SimpleImageProps {
     mode?: 'fill' | 'fit';
@@ -11,7 +11,7 @@ export interface SimpleImageProps {
 export interface SimpleImageState {
 }
 
-export default class SimpleImage extends React.Component<SimpleImageProps, SimpleImageState> {
+export default class SimpleImage extends Component<SimpleImageProps, SimpleImageState> {
     static defaultProps: SimpleImageProps;
 
     constructor(props: SimpleImageProps) {
