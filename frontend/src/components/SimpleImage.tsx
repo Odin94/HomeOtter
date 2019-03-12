@@ -26,8 +26,6 @@ export default class SimpleImage extends Component<SimpleImageProps, SimpleImage
         };
         const size = modes[mode || 'fit'];
 
-        console.log(JSON.stringify(props))
-
         const important = {
             backgroundImage: `url('${src}')`,
             backgroundSize: size,

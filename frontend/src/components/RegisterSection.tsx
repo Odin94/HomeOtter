@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import '../scss/RegisterSection.scss';
 
 import {
-    FormGroup, InputGroup, Card, Button, Elevation,
+    FormGroup, InputGroup, Card, Button, Elevation, Toaster, Toast, Intent,
 } from "@blueprintjs/core";
 
 interface RegisterSectionProps { }
@@ -29,6 +29,7 @@ class RegisterSection extends Component<RegisterSectionProps, RegisterSectionSta
 
         this.onInputChange = this.onInputChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.onToastDismissed = this.onToastDismissed.bind(this);
     }
 
     onInputChange(event: React.FormEvent<HTMLInputElement>) {
@@ -53,28 +54,38 @@ class RegisterSection extends Component<RegisterSectionProps, RegisterSectionSta
             const submitSuccessful = await this.submitForm();
             this.setState({ ...this.state, submitSuccessful });
         }
-    };
+    }
+
+    onToastDismissed() {
+        this.setState({ ...this.state, submitSuccessful: null });
+    }
+
 
     validateForm(): boolean {
         return true;
     }
 
-    submitForm(): Promise<boolean> {
-        return fetch('/user_api/users', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: this.state.email,
-                firstName: this.state.firstName,
-                lastName: this.state.lastName,
-                passwordHash: this.state.password,
-            })
-        }).then((response: Response) => {
+    async submitForm(): Promise<boolean> {
+        try {
+            const response = await fetch('/user_api/users', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: this.state.email,
+                    firstName: this.state.firstName,
+                    lastName: this.state.lastName,
+                    passwordHash: this.state.password,
+                })
+            });
+
             return response.status === 200;
-        });
+        } catch (err) {
+            console.log(err);
+            return false;
+        }
     }
 
     render() {
@@ -100,6 +111,12 @@ class RegisterSection extends Component<RegisterSectionProps, RegisterSectionSta
                     </form>
                 </Card>
 
+                {this.state.submitSuccessful === true && (
+                    <Toaster><Toast message="Registration successful!" intent={Intent.SUCCESS} onDismiss={this.onToastDismissed} timeout={3000} /></Toaster>
+                )}
+                {this.state.submitSuccessful === false && (
+                    <Toaster><Toast message="Registration failed!" intent={Intent.DANGER} onDismiss={this.onToastDismissed} timeout={3000} /></Toaster>
+                )}
             </section >
         );
     }
