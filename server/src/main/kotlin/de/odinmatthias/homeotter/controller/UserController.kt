@@ -2,6 +2,7 @@ package de.odinmatthias.homeotter.controller
 
 import de.odinmatthias.homeotter.model.HomeOtterUser
 import de.odinmatthias.homeotter.repository.UserRepository
+import org.mindrot.jbcrypt.BCrypt
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -16,9 +17,14 @@ class UserController(
     fun getAllUsers(): List<HomeOtterUser> = userRepository.findAll()
 
     @PostMapping("/users")
-    fun createNewUser(@Valid @RequestBody homeOtterUser: HomeOtterUser): HomeOtterUser = userRepository.save(homeOtterUser)
+    fun createNewUser(@Valid @RequestBody homeOtterUser: HomeOtterUser): HomeOtterUser {
+        homeOtterUser.passwordHash = BCrypt.hashpw(homeOtterUser.passwordHash, BCrypt.gensalt())
 
-    @GetMapping("/users/id")
+        return userRepository.save(homeOtterUser)
+    }
+    // for login: BCrypt.checkpw(plainPassword, hashedPassword)
+
+    @GetMapping("/users/{id}")
     fun getUserById(@PathVariable(value = "id") userId: Long): ResponseEntity<HomeOtterUser> {
         return userRepository.findById(userId).map { user ->
             ResponseEntity.ok(user)

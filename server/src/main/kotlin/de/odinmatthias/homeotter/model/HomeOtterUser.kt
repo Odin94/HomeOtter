@@ -21,5 +21,5 @@ data class HomeOtterUser(
         val lastName: String = "",
 
         @get: NotBlank
-        val passwordHash: String = ""
+        var passwordHash: String = ""
 )
