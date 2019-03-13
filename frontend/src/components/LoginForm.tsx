@@ -103,10 +103,10 @@ class LoginSection extends Component<LoginSectionProps, LoginSectionState> {
                 </Card>
 
                 {this.state.loginSuccessful === true && (
-                    <Toaster><Toast message="Registration successful!" intent={Intent.SUCCESS} onDismiss={this.onToastDismissed} timeout={3000} /></Toaster>
+                    <Toaster><Toast message="Login successful!" intent={Intent.SUCCESS} onDismiss={this.onToastDismissed} timeout={3000} /></Toaster>
                 )}
                 {this.state.loginSuccessful === false && (
-                    <Toaster><Toast message="Registration failed!" intent={Intent.DANGER} onDismiss={this.onToastDismissed} timeout={3000} /></Toaster>
+                    <Toaster><Toast message="Login failed!" intent={Intent.DANGER} onDismiss={this.onToastDismissed} timeout={3000} /></Toaster>
                 )}
             </section >
         );
