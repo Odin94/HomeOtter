@@ -1,30 +1,26 @@
 import React, { Component } from 'react';
-import '../scss/RegisterSection.scss';
+import '../scss/LoginSection.scss';
 
 import {
     FormGroup, InputGroup, Card, Button, Elevation, Toaster, Toast, Intent,
 } from "@blueprintjs/core";
 
-interface RegisterSectionProps { }
+interface LoginSectionProps { }
 
-interface RegisterSectionState {
+interface LoginSectionState {
     email: string,
-    firstName: string,
-    lastName: string,
     password: string,
-    submitSuccessful: boolean | null
+    loginSuccessful: boolean | null
 }
 
-class RegisterSection extends Component<RegisterSectionProps, RegisterSectionState> {
+class LoginSection extends Component<LoginSectionProps, LoginSectionState> {
 
-    constructor(props: RegisterSectionProps) {
+    constructor(props: LoginSectionProps) {
         super(props);
         this.state = {
             email: "",
-            firstName: "",
-            lastName: "",
             password: "",
-            submitSuccessful: null
+            loginSuccessful: null
         }
 
         this.onInputChange = this.onInputChange.bind(this);
@@ -37,7 +33,7 @@ class RegisterSection extends Component<RegisterSectionProps, RegisterSectionSta
 
         console.log(`${target.name}: ${target.value}`);
 
-        if (["email", "firstName", "lastName", "password"].includes(target.name)) {
+        if (["email", "password"].includes(target.name)) {
             // @ts-ignore
             this.setState({
                 [target.name]: target.value
@@ -51,13 +47,13 @@ class RegisterSection extends Component<RegisterSectionProps, RegisterSectionSta
         e.preventDefault();
 
         if (this.validateForm()) {
-            const submitSuccessful = await this.submitForm();
-            this.setState({ ...this.state, submitSuccessful });
+            const loginSuccessful = await this.submitForm();
+            this.setState({ ...this.state, loginSuccessful });
         }
     }
 
     onToastDismissed() {
-        this.setState({ ...this.state, submitSuccessful: null });
+        this.setState({ ...this.state, loginSuccessful: null });
     }
 
 
@@ -68,7 +64,7 @@ class RegisterSection extends Component<RegisterSectionProps, RegisterSectionSta
 
     async submitForm(): Promise<boolean> {
         try {
-            const response = await fetch('/user_api/users', {
+            const response = await fetch('/user_api/login', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -76,11 +72,11 @@ class RegisterSection extends Component<RegisterSectionProps, RegisterSectionSta
                 },
                 body: JSON.stringify({
                     email: this.state.email,
-                    firstName: this.state.firstName,
-                    lastName: this.state.lastName,
-                    passwordHash: this.state.password,
+                    password: this.state.password,
                 })
             });
+
+            console.log(response);
 
             return response.status === 200;
         } catch (err) {
@@ -91,31 +87,25 @@ class RegisterSection extends Component<RegisterSectionProps, RegisterSectionSta
 
     render() {
         return (
-            <section id="register-section">
+            <section id="login-section">
                 <Card elevation={Elevation.ONE}>
                     <form onSubmit={this.onSubmit}>
-                        <h1>Register</h1>
+                        <h1>Login</h1>
                         <FormGroup>
                             <InputGroup name="email" value={this.state.email} onChange={this.onInputChange} leftIcon="envelope" id="email-input" placeholder="Email Address" />
-                        </FormGroup>
-                        <FormGroup>
-                            <InputGroup name="firstName" value={this.state.firstName} onChange={this.onInputChange} leftIcon="person" id="firstname-input" placeholder="First Name" />
-                        </FormGroup>
-                        <FormGroup>
-                            <InputGroup name="lastName" value={this.state.lastName} onChange={this.onInputChange} leftIcon="person" id="lastname-input" placeholder="Last Name" />
                         </FormGroup>
                         <FormGroup>
                             <InputGroup name="password" value={this.state.password} onChange={this.onInputChange} leftIcon="lock" id="text-input" placeholder="Password" type="password" />
                         </FormGroup>
 
-                        <Button type="submit" fill>Register</Button>
+                        <Button type="submit" fill>Login</Button>
                     </form>
                 </Card>
 
-                {this.state.submitSuccessful === true && (
+                {this.state.loginSuccessful === true && (
                     <Toaster><Toast message="Registration successful!" intent={Intent.SUCCESS} onDismiss={this.onToastDismissed} timeout={3000} /></Toaster>
                 )}
-                {this.state.submitSuccessful === false && (
+                {this.state.loginSuccessful === false && (
                     <Toaster><Toast message="Registration failed!" intent={Intent.DANGER} onDismiss={this.onToastDismissed} timeout={3000} /></Toaster>
                 )}
             </section >
@@ -123,4 +113,4 @@ class RegisterSection extends Component<RegisterSectionProps, RegisterSectionSta
     }
 }
 
-export default RegisterSection;
+export default LoginSection;

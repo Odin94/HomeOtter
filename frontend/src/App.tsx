@@ -4,6 +4,7 @@ import LandingSection from './components/LandingSection';
 import './scss/App.scss';
 import Register from './components/RegisterSection';
 import RegisterSection from './components/RegisterSection';
+import LoginSection from './components/LoginForm';
 
 class App extends Component {
   state = {
@@ -26,6 +27,7 @@ class App extends Component {
       <div id="app">
         <LandingSection />
         <RegisterSection />
+        <LoginSection />
       </div>
     );
   }

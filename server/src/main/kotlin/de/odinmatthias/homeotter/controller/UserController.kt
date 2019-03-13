@@ -18,11 +18,26 @@ class UserController(
 
     @PostMapping("/users")
     fun createNewUser(@Valid @RequestBody homeOtterUser: HomeOtterUser): HomeOtterUser {
-        homeOtterUser.passwordHash = BCrypt.hashpw(homeOtterUser.passwordHash, BCrypt.gensalt())
+        if (userRepository.findRegisteredUserByEmail(homeOtterUser.email) == null) {
+            homeOtterUser.passwordHash = BCrypt.hashpw(homeOtterUser.passwordHash, BCrypt.gensalt())
 
-        return userRepository.save(homeOtterUser)
+            return userRepository.save(homeOtterUser)
+        } else {
+            throw EmailAlreadyInUseException()
+        }
     }
-    // for login: BCrypt.checkpw(plainPassword, hashedPassword)
+
+    @PostMapping("/login")
+    fun loginUser(@RequestBody loginData: Map<String, String>): String {
+        // TODO: test this and then commit
+        val user = userRepository.findRegisteredUserByEmail(loginData.getValue("email"))
+
+        if (user != null && BCrypt.checkpw(loginData.getValue("password"), user.passwordHash)) {
+            return "Yes C:"
+        }
+        return "NO >:C"
+    }
+
 
     @GetMapping("/users/{id}")
     fun getUserById(@PathVariable(value = "id") userId: Long): ResponseEntity<HomeOtterUser> {
