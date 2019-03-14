@@ -5,6 +5,7 @@ import de.odinmatthias.homeotter.repository.UserRepository
 import org.mindrot.jbcrypt.BCrypt
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.util.MultiValueMap
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
@@ -27,15 +28,15 @@ class UserController(
         }
     }
 
-    @PostMapping("/login")
-    fun loginUser(@RequestBody loginData: Map<String, String>): String {
+    @PostMapping("/login", produces = ["application/json"])
+    fun loginUser(@RequestBody loginData: Map<String, String>): ResponseEntity<String> {
         // TODO: test this and then commit
         val user = userRepository.findRegisteredUserByEmail(loginData.getValue("email"))
 
         if (user != null && BCrypt.checkpw(loginData.getValue("password"), user.passwordHash)) {
-            return "Yes C:"
+            return ResponseEntity("Logged in!", HttpStatus.OK)
         }
-        return "NO >:C"
+        return ResponseEntity("Loin FAILED!", mapOf("custom-header" to "test") as MultiValueMap<String, String>, HttpStatus.UNAUTHORIZED)
     }
 
 

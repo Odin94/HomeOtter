@@ -1,4 +1,5 @@
 import React from 'react';
+import { CookiesProvider } from 'react-cookie';
 import ReactDOM from 'react-dom';
 import './scss/index.scss';
 import { BrowserRouter } from "react-router-dom";
@@ -7,9 +8,11 @@ import * as serviceWorker from './serviceWorker';
 import "@blueprintjs/core/lib/css/blueprint.css";
 
 ReactDOM.render(
-    <BrowserRouter>
-        <App />
-    </BrowserRouter>
+    <CookiesProvider>
+        <BrowserRouter>
+            <App />
+        </BrowserRouter >
+    </CookiesProvider>
     , document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

@@ -5,12 +5,15 @@ import {
     FormGroup, InputGroup, Card, Button, Elevation, Toaster, Toast, Intent,
 } from "@blueprintjs/core";
 
-interface LoginSectionProps { }
+interface LoginSectionProps {
+    csrfToken: string
+}
 
 interface LoginSectionState {
     email: string,
     password: string,
-    loginSuccessful: boolean | null
+    loginSuccessful: boolean | null,
+    csrfToken: string
 }
 
 class LoginSection extends Component<LoginSectionProps, LoginSectionState> {
@@ -20,8 +23,9 @@ class LoginSection extends Component<LoginSectionProps, LoginSectionState> {
         this.state = {
             email: "",
             password: "",
-            loginSuccessful: null
-        }
+            loginSuccessful: null,
+            csrfToken: props.csrfToken
+        };
 
         this.onInputChange = this.onInputChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
@@ -69,12 +73,19 @@ class LoginSection extends Component<LoginSectionProps, LoginSectionState> {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': this.state.csrfToken
                 },
                 body: JSON.stringify({
                     email: this.state.email,
                     password: this.state.password,
                 })
             });
+
+            response.text()
+                .then((body) => {
+                    console.log("wat")
+                    console.log(body);
+                });
 
             console.log(response);
 

@@ -1,36 +1,53 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import LandingSection from './components/LandingSection';
 import './scss/App.scss';
-import Register from './components/RegisterSection';
 import RegisterSection from './components/RegisterSection';
-import LoginSection from './components/LoginForm';
+import LoginSection from './components/LoginSection';
+import { Cookies } from 'react-cookie';
+import { withCookies } from 'react-cookie';
 
-class App extends Component {
-  state = {
-    message: null
+interface AppProps {
+  cookies?: Cookies
+}
+interface AppState {
+  csrfToken: string,
+  isAuthenticated: boolean,
+  user: any | undefined
+}
+
+class App extends Component<AppProps, AppState> {
+  constructor(props: AppProps) {
+    super(props);
+    const { cookies } = props;
+
+    this.state = {
+      csrfToken: cookies!!.get('XSRF-TOKEN'),
+      isAuthenticated: false,
+      user: undefined
+    };
+
+    console.log(this.state.csrfToken);
   }
 
-  componentDidMount() {
-    // // Make a GET-request to our backend
-    // fetch('/api/hello')
-    //   // Map the result to a JSON-object
-    //   .then(response => response.json())
-    //   // Put the message in the state
-    //   .then(response => {
-    //     this.setState({ message: response.message })
-    //   })
+  async componentDidMount() {
+    const response = await fetch('/api/user', { credentials: 'include' });
+    const body = await response.text();
+    if (body === '') {
+      this.setState(({ isAuthenticated: false }))
+    } else {
+      this.setState({ isAuthenticated: true, user: JSON.parse(body) })
+    }
   }
 
   render() {
     return (
       <div id="app">
         <LandingSection />
-        <RegisterSection />
-        <LoginSection />
+        <RegisterSection csrfToken={this.state.csrfToken} />
+        <LoginSection csrfToken={this.state.csrfToken} />
       </div>
     );
   }
 }
 
-export default App;
+export default withCookies(App);

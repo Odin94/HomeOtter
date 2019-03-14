@@ -24,6 +24,7 @@ class WebSecurityConfig(
         http
                 .authorizeRequests()
                 .antMatchers("/**").permitAll()  // permit free access to match
+//                .antMatchers("/api/hello").authenticated()
 //                .anyRequest().authenticated()  // all others require auth
                 .and()
 

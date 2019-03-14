@@ -5,14 +5,17 @@ import {
     FormGroup, InputGroup, Card, Button, Elevation, Toaster, Toast, Intent,
 } from "@blueprintjs/core";
 
-interface RegisterSectionProps { }
+interface RegisterSectionProps {
+    csrfToken: string
+}
 
 interface RegisterSectionState {
     email: string,
     firstName: string,
     lastName: string,
     password: string,
-    submitSuccessful: boolean | null
+    submitSuccessful: boolean | null,
+    csrfToken: string
 }
 
 class RegisterSection extends Component<RegisterSectionProps, RegisterSectionState> {
@@ -24,7 +27,8 @@ class RegisterSection extends Component<RegisterSectionProps, RegisterSectionSta
             firstName: "",
             lastName: "",
             password: "",
-            submitSuccessful: null
+            submitSuccessful: null,
+            csrfToken: this.props.csrfToken,
         }
 
         this.onInputChange = this.onInputChange.bind(this);
@@ -73,6 +77,7 @@ class RegisterSection extends Component<RegisterSectionProps, RegisterSectionSta
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
+                    'X-XSRF-TOKEN': this.state.csrfToken,
                 },
                 body: JSON.stringify({
                     email: this.state.email,
