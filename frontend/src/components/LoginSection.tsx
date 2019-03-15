@@ -35,8 +35,6 @@ class LoginSection extends Component<LoginSectionProps, LoginSectionState> {
     onInputChange(event: React.FormEvent<HTMLInputElement>) {
         const target = event.currentTarget;
 
-        console.log(`${target.name}: ${target.value}`);
-
         if (["email", "password"].includes(target.name)) {
             // @ts-ignore
             this.setState({
@@ -68,22 +66,22 @@ class LoginSection extends Component<LoginSectionProps, LoginSectionState> {
 
     async submitForm(): Promise<boolean> {
         try {
+            const formData = new URLSearchParams();
+            formData.append('email', this.state.email);
+            formData.append('password', this.state.password);
+
             const response = await fetch('/user_api/login', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                     'X-XSRF-TOKEN': this.state.csrfToken
                 },
-                body: JSON.stringify({
-                    email: this.state.email,
-                    password: this.state.password,
-                })
+                body: formData.toString()
             });
 
             response.text()
                 .then((body) => {
-                    console.log("wat")
                     console.log(body);
                 });
 

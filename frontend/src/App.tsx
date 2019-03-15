@@ -35,6 +35,7 @@ class App extends Component<AppProps, AppState> {
     if (body === '') {
       this.setState(({ isAuthenticated: false }))
     } else {
+      console.log(body);
       this.setState({ isAuthenticated: true, user: JSON.parse(body) })
     }
   }

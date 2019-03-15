@@ -1,18 +1,21 @@
-package de.odinmatthias.homeotter.controller
+package de.odinmatthias.homeotter.homeotter_user.controller
 
-import de.odinmatthias.homeotter.model.HomeOtterUser
-import de.odinmatthias.homeotter.repository.UserRepository
+import de.odinmatthias.homeotter.EmailAlreadyInUseException
+import de.odinmatthias.homeotter.homeotter_user.model.HomeOtterUser
+import de.odinmatthias.homeotter.homeotter_user.repository.UserRepository
 import org.mindrot.jbcrypt.BCrypt
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.util.MultiValueMap
+import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
+
 
 @RestController
 @RequestMapping("/user_api")
 class UserController(
-        private val userRepository: UserRepository
+        private val userRepository: UserRepository,
+        private val authenticationManager: AuthenticationManager
 ) {
     @GetMapping("/users")
     fun getAllUsers(): List<HomeOtterUser> = userRepository.findAll()
@@ -27,18 +30,6 @@ class UserController(
             throw EmailAlreadyInUseException()
         }
     }
-
-    @PostMapping("/login", produces = ["application/json"])
-    fun loginUser(@RequestBody loginData: Map<String, String>): ResponseEntity<String> {
-        // TODO: test this and then commit
-        val user = userRepository.findRegisteredUserByEmail(loginData.getValue("email"))
-
-        if (user != null && BCrypt.checkpw(loginData.getValue("password"), user.passwordHash)) {
-            return ResponseEntity("Logged in!", HttpStatus.OK)
-        }
-        return ResponseEntity("Loin FAILED!", mapOf("custom-header" to "test") as MultiValueMap<String, String>, HttpStatus.UNAUTHORIZED)
-    }
-
 
     @GetMapping("/users/{id}")
     fun getUserById(@PathVariable(value = "id") userId: Long): ResponseEntity<HomeOtterUser> {

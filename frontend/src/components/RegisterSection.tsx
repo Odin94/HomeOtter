@@ -39,8 +39,6 @@ class RegisterSection extends Component<RegisterSectionProps, RegisterSectionSta
     onInputChange(event: React.FormEvent<HTMLInputElement>) {
         const target = event.currentTarget;
 
-        console.log(`${target.name}: ${target.value}`);
-
         if (["email", "firstName", "lastName", "password"].includes(target.name)) {
             // @ts-ignore
             this.setState({

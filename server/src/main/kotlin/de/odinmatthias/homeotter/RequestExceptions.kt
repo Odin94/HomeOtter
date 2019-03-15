@@ -1,4 +1,4 @@
-package de.odinmatthias.homeotter.controller
+package de.odinmatthias.homeotter
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ResponseBody

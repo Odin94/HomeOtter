@@ -1,31 +1,34 @@
 package de.odinmatthias.homeotter
 
 import com.allanditzel.springframework.security.web.csrf.CsrfTokenResponseHeaderBindingFilter
-import de.odinmatthias.homeotter.controller.HomeOtterUserDetailsService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.security.authentication.AuthenticationManager
-import org.springframework.security.config.BeanIds
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
-import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository
 import org.springframework.security.web.csrf.CsrfFilter
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 
 @Configuration
 @EnableWebSecurity
-class WebSecurityConfig(
-        val userService: HomeOtterUserDetailsService
-) : WebSecurityConfigurerAdapter() {
+class WebSecurityConfig : WebSecurityConfigurerAdapter() {
+
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
         http
                 .authorizeRequests()
-                .antMatchers("/**").permitAll()  // permit free access to match
-//                .antMatchers("/api/hello").authenticated()
-//                .anyRequest().authenticated()  // all others require auth
+                .antMatchers("/", "/*", "/user_api/**", "/api/log", "/user_api/login").permitAll()  // permit free access to match
+                .anyRequest().authenticated()  // all others require auth
+                .and()
+
+                .httpBasic()
+                .and()
+
+                .cors()
                 .and()
 
                 .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
@@ -33,6 +36,9 @@ class WebSecurityConfig(
                 .addFilterAfter(CsrfTokenResponseHeaderBindingFilter(), CsrfFilter::class.java)
 
                 .formLogin()
+                .loginPage("/")
+                .loginProcessingUrl("/user_api/login")
+                .usernameParameter("email")
                 .permitAll()
                 .and()
 
@@ -40,18 +46,20 @@ class WebSecurityConfig(
                 .and()
 
                 .logout()
+                .logoutUrl("/user_api/logout")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
     }
 
-    @Bean(name = [BeanIds.AUTHENTICATION_MANAGER])
-    @Throws(Exception::class)
-    override fun authenticationManagerBean(): AuthenticationManager {
-        return super.authenticationManagerBean()
-    }
-
     @Bean
-    public override fun userDetailsService(): UserDetailsService {
-        return userService
+    fun corsConfigurationSource(): CorsConfigurationSource {
+        val configuration = CorsConfiguration()
+        configuration.allowedOrigins = listOf("*")
+        configuration.allowedMethods = listOf("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH")
+        configuration.allowCredentials = true
+        configuration.allowedHeaders = listOf("Authorization", "Cache-Control", "Content-Type", "x-xsrf-token")
+        val source = UrlBasedCorsConfigurationSource()
+        source.registerCorsConfiguration("/**", configuration)
+        return source
     }
 }

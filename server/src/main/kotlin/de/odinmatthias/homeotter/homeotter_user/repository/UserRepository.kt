@@ -1,7 +1,7 @@
-package de.odinmatthias.homeotter.repository
+package de.odinmatthias.homeotter.homeotter_user.repository
 
 
-import de.odinmatthias.homeotter.model.HomeOtterUser
+import de.odinmatthias.homeotter.homeotter_user.model.HomeOtterUser
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 

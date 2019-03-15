@@ -6,10 +6,15 @@ import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerF
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpStatus
+import org.springframework.web.servlet.config.annotation.CorsRegistry
 
 
 @Configuration
 class WebConfig {
+
+    fun addCorsMappings(registry: CorsRegistry) {
+        registry.addMapping("/**").allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH")
+    }
 
     // Redirect to / for all not-found urls so everything leads you to the React SPA
     @Bean

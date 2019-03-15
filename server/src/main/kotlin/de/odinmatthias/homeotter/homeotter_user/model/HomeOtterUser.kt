@@ -1,4 +1,4 @@
-package de.odinmatthias.homeotter.model
+package de.odinmatthias.homeotter.homeotter_user.model
 
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
