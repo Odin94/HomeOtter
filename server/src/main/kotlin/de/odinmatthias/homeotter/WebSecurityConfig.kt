@@ -13,6 +13,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.web.authentication.AuthenticationFailureHandler
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler
 import org.springframework.security.web.csrf.CsrfFilter
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
@@ -31,14 +33,12 @@ class WebSecurityConfig(
     override fun configure(http: HttpSecurity) {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/*", "/user_api/**", "/api/log", "/user_api/login").permitAll()  // permit free access to match
+                .antMatchers("/*", "/user_api/**", "/api/log").permitAll()  // permit free access to match
 //                .anyRequest().authenticated()  // all others require auth
                 .and()
 
                 .cors()
                 .and()
-
-                .httpBasic().disable()
 
                 .csrf().disable()//.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
 //                .and()
@@ -49,11 +49,10 @@ class WebSecurityConfig(
                 .loginProcessingUrl("/user_api/login")
                 .usernameParameter("email")
                 .defaultSuccessUrl("/login?success=true", true)
-                .failureUrl("/login?success=false")
+                .successHandler(successHandler())
+                .failureUrl("/api/log")//("/login?success=false")
+                .failureHandler(failureHandler())
                 .permitAll()
-                .and()
-
-                .httpBasic()
                 .and()
 
                 .logout()
@@ -65,9 +64,21 @@ class WebSecurityConfig(
     @Autowired
     @Throws(Exception::class)
     fun configureGlobal(auth: AuthenticationManagerBuilder) {
-//        auth.authenticationProvider(authenticationProvider())
-        auth.parentAuthenticationManager(authenticationManagerBean())
-                .userDetailsService(userDetailsService)
+        auth.parentAuthenticationManager(null)
+    }
+
+    private fun successHandler(): AuthenticationSuccessHandler {
+        return AuthenticationSuccessHandler { httpServletRequest, httpServletResponse, e ->
+            httpServletResponse.writer.append("Authentication success")
+            httpServletResponse.status = 200
+        }
+    }
+
+    private fun failureHandler(): AuthenticationFailureHandler {
+        return AuthenticationFailureHandler { httpServletRequest, httpServletResponse, e ->
+            httpServletResponse.writer.append("Authentication failure")
+            httpServletResponse.status = 401
+        }
     }
 
     @Bean
