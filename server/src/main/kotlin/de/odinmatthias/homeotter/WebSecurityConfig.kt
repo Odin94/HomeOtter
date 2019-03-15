@@ -1,12 +1,18 @@
 package de.odinmatthias.homeotter
 
 import com.allanditzel.springframework.security.web.csrf.CsrfTokenResponseHeaderBindingFilter
+import de.odinmatthias.homeotter.homeotter_user.service.HomeOtterUserDetailsService
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.csrf.CsrfFilter
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
@@ -15,30 +21,35 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
 @EnableWebSecurity
-class WebSecurityConfig : WebSecurityConfigurerAdapter() {
+class WebSecurityConfig(
+        @Autowired
+        val userDetailsService: HomeOtterUserDetailsService
+) : WebSecurityConfigurerAdapter() {
+
 
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
         http
                 .authorizeRequests()
                 .antMatchers("/", "/*", "/user_api/**", "/api/log", "/user_api/login").permitAll()  // permit free access to match
-                .anyRequest().authenticated()  // all others require auth
-                .and()
-
-                .httpBasic()
+//                .anyRequest().authenticated()  // all others require auth
                 .and()
 
                 .cors()
                 .and()
 
-                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .and()
+                .httpBasic().disable()
+
+                .csrf().disable()//.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+//                .and()
                 .addFilterAfter(CsrfTokenResponseHeaderBindingFilter(), CsrfFilter::class.java)
 
                 .formLogin()
                 .loginPage("/")
                 .loginProcessingUrl("/user_api/login")
                 .usernameParameter("email")
+                .defaultSuccessUrl("/login?success=true", true)
+                .failureUrl("/login?success=false")
                 .permitAll()
                 .and()
 
@@ -49,6 +60,33 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
                 .logoutUrl("/user_api/logout")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
+    }
+
+    @Autowired
+    @Throws(Exception::class)
+    fun configureGlobal(auth: AuthenticationManagerBuilder) {
+//        auth.authenticationProvider(authenticationProvider())
+        auth.parentAuthenticationManager(authenticationManagerBean())
+                .userDetailsService(userDetailsService)
+    }
+
+    @Bean
+    @Throws(Exception::class)
+    override fun authenticationManagerBean(): AuthenticationManager {
+        return super.authenticationManagerBean()
+    }
+
+    @Bean
+    fun authenticationProvider(): DaoAuthenticationProvider {
+        val authProvider = DaoAuthenticationProvider()
+        authProvider.setUserDetailsService(userDetailsService)
+        authProvider.setPasswordEncoder(encoder())
+        return authProvider
+    }
+
+    @Bean
+    fun encoder(): PasswordEncoder {
+        return BCryptPasswordEncoder(11)
     }
 
     @Bean
