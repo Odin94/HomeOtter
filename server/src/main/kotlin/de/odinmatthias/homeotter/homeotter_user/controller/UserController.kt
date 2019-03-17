@@ -25,11 +25,14 @@ class UserController(
     fun getAllUsers(): List<HomeOtterUser> = userRepository.findAll()
 
     @PostMapping("/users")
-    fun createNewUser(@Valid @RequestBody homeOtterUser: HomeOtterUser): HomeOtterUser {
+    fun createNewUser(@Valid @RequestBody homeOtterUser: HomeOtterUser, httpServletRequest: HttpServletRequest): HomeOtterUser {
         if (userRepository.findRegisteredUserByEmail(homeOtterUser.email) == null) {
-            homeOtterUser.passwordHash = BCrypt.hashpw(homeOtterUser.passwordHash, BCrypt.gensalt())
+            val hashedPassword = BCrypt.hashpw(homeOtterUser.passwordHash, BCrypt.gensalt())
+            val savedUser = userRepository.save(homeOtterUser.copy(passwordHash = hashedPassword))
 
-            return userRepository.save(homeOtterUser)
+            httpServletRequest.login(savedUser.email, homeOtterUser.passwordHash)
+
+            return savedUser
         } else {
             throw EmailAlreadyInUseException()
         }

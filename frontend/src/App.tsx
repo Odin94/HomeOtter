@@ -30,14 +30,19 @@ class App extends Component<AppProps, AppState> {
   }
 
   async componentDidMount() {
-    // const response = await fetch('/api/user', { credentials: 'include' });
-    // const body = await response.text();
-    // if (body === '') {
-    //   this.setState(({ isAuthenticated: false }))
-    // } else {
-    //   console.log(body);
-    //   this.setState({ isAuthenticated: true, user: JSON.parse(body) })
-    // }
+    const sessionId = this.props.cookies!!.get('JSESSIONID');
+    console.log(sessionId);
+    if (sessionId != undefined) {
+      const response = await fetch(`/user_api/session/${sessionId}`, { credentials: 'include' });
+      const body = await response.text();
+      console.log("onDidMount: ", body);
+      if (body === '') {
+        this.setState(({ isAuthenticated: false }))
+      } else {
+        console.log(body);
+        this.setState({ isAuthenticated: true, user: JSON.parse(body) })
+      }
+    }
   }
 
   render() {
