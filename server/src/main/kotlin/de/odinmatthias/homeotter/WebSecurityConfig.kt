@@ -67,8 +67,9 @@ class WebSecurityConfig(
     }
 
     private fun successHandler(): AuthenticationSuccessHandler {
-        return AuthenticationSuccessHandler { httpServletRequest, httpServletResponse, e ->
+        return AuthenticationSuccessHandler { httpServletRequest, httpServletResponse, authentication ->
             httpServletResponse.writer.append("Authentication success")
+            httpServletResponse.writer.append(authentication.name)
             httpServletResponse.status = 200
         }
     }

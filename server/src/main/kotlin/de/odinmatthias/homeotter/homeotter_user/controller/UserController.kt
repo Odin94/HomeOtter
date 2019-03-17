@@ -1,13 +1,17 @@
 package de.odinmatthias.homeotter.homeotter_user.controller
 
 import de.odinmatthias.homeotter.EmailAlreadyInUseException
+import de.odinmatthias.homeotter.InvalidSessionException
 import de.odinmatthias.homeotter.homeotter_user.model.HomeOtterUser
 import de.odinmatthias.homeotter.homeotter_user.repository.UserRepository
 import org.mindrot.jbcrypt.BCrypt
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.web.bind.annotation.*
+import javax.servlet.http.HttpServletRequest
 import javax.validation.Valid
 
 
@@ -31,6 +35,21 @@ class UserController(
         }
     }
 
+    @PostMapping("/session/{providedSessionId}")
+    fun getUserFromSession(principal: UsernamePasswordAuthenticationToken,
+                           httpServletRequest: HttpServletRequest,
+                           @PathVariable("providedSessionId") providedSessionId: String): HomeOtterUser {
+        val sessionId = httpServletRequest.requestedSessionId
+
+        if (sessionId == providedSessionId) {
+            val email = principal.name
+            return userRepository.findRegisteredUserByEmail(email)
+                    ?: throw UsernameNotFoundException("$email not found")
+        } else {
+            throw InvalidSessionException()
+        }
+    }
+
     @GetMapping("/users/{id}")
     fun getUserById(@PathVariable(value = "id") userId: Long): ResponseEntity<HomeOtterUser> {
         return userRepository.findById(userId).map { user ->
@@ -38,7 +57,7 @@ class UserController(
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    @PutMapping("/Users/{id}")
+    @PutMapping("/users/{id}")
     fun updateUserById(@PathVariable(value = "id") UserId: Long,
                        @Valid @RequestBody newHomeOtterUser: HomeOtterUser): ResponseEntity<HomeOtterUser> {
 
@@ -53,7 +72,7 @@ class UserController(
 
     }
 
-    @DeleteMapping("/Users/{id}")
+    @DeleteMapping("/users/{id}")
     fun deleteUserById(@PathVariable(value = "id") UserId: Long): ResponseEntity<Void> {
 
         return userRepository.findById(UserId).map { User ->
