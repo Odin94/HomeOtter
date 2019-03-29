@@ -4,9 +4,10 @@ import '../scss/LoginSection.scss';
 import {
     FormGroup, InputGroup, Card, Button, Elevation, Toaster, Toast, Intent,
 } from "@blueprintjs/core";
+import { Cookies } from 'react-cookie';
 
 interface LoginSectionProps {
-    csrfToken: string
+    cookies?: Cookies
 }
 
 interface LoginSectionState {
@@ -20,11 +21,13 @@ class LoginSection extends Component<LoginSectionProps, LoginSectionState> {
 
     constructor(props: LoginSectionProps) {
         super(props);
+        const { cookies } = props;
+
         this.state = {
             email: "",
             password: "",
             loginSuccessful: null,
-            csrfToken: props.csrfToken
+            csrfToken: cookies!!.get('XSRF-TOKEN'),
         };
 
         this.onInputChange = this.onInputChange.bind(this);

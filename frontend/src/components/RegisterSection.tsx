@@ -4,9 +4,10 @@ import '../scss/RegisterSection.scss';
 import {
     FormGroup, InputGroup, Card, Button, Elevation, Toaster, Toast, Intent,
 } from "@blueprintjs/core";
+import { Cookies } from 'react-cookie';
 
 interface RegisterSectionProps {
-    csrfToken: string
+    cookies?: Cookies
 }
 
 interface RegisterSectionState {
@@ -22,13 +23,15 @@ class RegisterSection extends Component<RegisterSectionProps, RegisterSectionSta
 
     constructor(props: RegisterSectionProps) {
         super(props);
+        const { cookies } = props;
+
         this.state = {
             email: "",
             firstName: "",
             lastName: "",
             password: "",
             submitSuccessful: null,
-            csrfToken: this.props.csrfToken,
+            csrfToken: cookies!!.get('XSRF-TOKEN'),
         }
 
         this.onInputChange = this.onInputChange.bind(this);

@@ -2,16 +2,14 @@ import React from 'react';
 import { CookiesProvider } from 'react-cookie';
 import ReactDOM from 'react-dom';
 import './scss/index.scss';
-import { BrowserRouter } from "react-router-dom";
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import "@blueprintjs/core/lib/css/blueprint.css";
 
+
 ReactDOM.render(
     <CookiesProvider>
-        <BrowserRouter>
-            <App />
-        </BrowserRouter >
+        <App />
     </CookiesProvider>
     , document.getElementById('root'));
 
