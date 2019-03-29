@@ -15,6 +15,7 @@ import {
     Switch,
     Icon,
 } from "@blueprintjs/core";
+import { Link } from 'react-router-dom';
 
 class HeaderMenu extends Component {
 
@@ -30,8 +31,8 @@ class HeaderMenu extends Component {
                         </Navbar.Heading>
                     </Navbar.Group>
                     <Navbar.Group align={Alignment.RIGHT}>
-                        <Button className="bp3-minimal" icon={<Icon icon="new-person" iconSize={20} />} text="Register" />
-                        <Button className="bp3-minimal" icon={<Icon icon="log-in" iconSize={20} />} text="Login" />
+                        <Link to="/register"><Button className="bp3-minimal" icon={<Icon icon="new-person" iconSize={20} />} text="Register" /></Link>
+                        <Link to="/login"> <Button className="bp3-minimal" icon={<Icon icon="log-in" iconSize={20} />} text="Login" /></Link>
                     </Navbar.Group>
                 </Navbar>
             </header>

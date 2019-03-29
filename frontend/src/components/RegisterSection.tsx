@@ -102,16 +102,16 @@ class RegisterSection extends Component<RegisterSectionProps, RegisterSectionSta
                     <form onSubmit={this.onSubmit}>
                         <h1>Register</h1>
                         <FormGroup>
-                            <InputGroup name="email" value={this.state.email} onChange={this.onInputChange} leftIcon="envelope" id="email-input" placeholder="Email Address" />
+                            <InputGroup name="email" value={this.state.email} onChange={this.onInputChange} leftIcon="envelope" id="register-email-input" placeholder="Email Address" />
                         </FormGroup>
                         <FormGroup>
-                            <InputGroup name="firstName" value={this.state.firstName} onChange={this.onInputChange} leftIcon="person" id="firstname-input" placeholder="First Name" />
+                            <InputGroup name="firstName" value={this.state.firstName} onChange={this.onInputChange} leftIcon="person" id="register-firstname-input" placeholder="First Name" />
                         </FormGroup>
                         <FormGroup>
-                            <InputGroup name="lastName" value={this.state.lastName} onChange={this.onInputChange} leftIcon="person" id="lastname-input" placeholder="Last Name" />
+                            <InputGroup name="lastName" value={this.state.lastName} onChange={this.onInputChange} leftIcon="person" id="register-lastname-input" placeholder="Last Name" />
                         </FormGroup>
                         <FormGroup>
-                            <InputGroup name="password" value={this.state.password} onChange={this.onInputChange} leftIcon="lock" id="text-input" placeholder="Password" type="password" />
+                            <InputGroup name="password" value={this.state.password} onChange={this.onInputChange} leftIcon="lock" id="register-password" placeholder="Password" type="password" />
                         </FormGroup>
 
                         <Button type="submit" fill>Register</Button>

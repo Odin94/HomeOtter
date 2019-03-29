@@ -104,10 +104,10 @@ class LoginSection extends Component<LoginSectionProps, LoginSectionState> {
                     <form onSubmit={this.onSubmit}>
                         <h1>Login</h1>
                         <FormGroup>
-                            <InputGroup name="email" value={this.state.email} onChange={this.onInputChange} leftIcon="envelope" id="email-input" placeholder="Email Address" />
+                            <InputGroup name="email" value={this.state.email} onChange={this.onInputChange} leftIcon="envelope" id="login-email-input" placeholder="Email Address" />
                         </FormGroup>
                         <FormGroup>
-                            <InputGroup name="password" value={this.state.password} onChange={this.onInputChange} leftIcon="lock" id="text-input" placeholder="Password" type="password" />
+                            <InputGroup name="password" value={this.state.password} onChange={this.onInputChange} leftIcon="lock" id="login-password" placeholder="Password" type="password" />
                         </FormGroup>
 
                         <Button type="submit" fill>Login</Button>
