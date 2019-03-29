@@ -34,8 +34,8 @@ class WebSecurityConfig(
     override fun configure(http: HttpSecurity) {
         http
                 .authorizeRequests()
-                .antMatchers("/*", "/user_api/**", "/api/log").permitAll()  // permit free access to match
-//                .anyRequest().authenticated()  // all others require auth
+                .antMatchers("/resources/**", "/static/**", "/*", "/user_api/**", "/api/*").permitAll()  // permit free access to match#
+                .anyRequest().authenticated()  // all others require auth
                 .and()
 
                 .cors()
@@ -58,6 +58,9 @@ class WebSecurityConfig(
                 .logoutUrl("/user_api/logout")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
+                .and()
+
+                .httpBasic().disable()
     }
 
     @Autowired
