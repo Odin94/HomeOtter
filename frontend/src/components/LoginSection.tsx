@@ -5,6 +5,7 @@ import {
     FormGroup, InputGroup, Card, Button, Elevation, Toaster, Toast, Intent,
 } from "@blueprintjs/core";
 import { Cookies } from 'react-cookie';
+import { Redirect } from 'react-router';
 
 interface LoginSectionProps {
     cookies?: Cookies
@@ -14,7 +15,8 @@ interface LoginSectionState {
     email: string,
     password: string,
     loginSuccessful: boolean | null,
-    csrfToken: string
+    csrfToken: string,
+    shouldRedirect: boolean
 }
 
 class LoginSection extends Component<LoginSectionProps, LoginSectionState> {
@@ -28,6 +30,7 @@ class LoginSection extends Component<LoginSectionProps, LoginSectionState> {
             password: "",
             loginSuccessful: null,
             csrfToken: cookies!!.get('XSRF-TOKEN'),
+            shouldRedirect: false,
         };
 
         this.onInputChange = this.onInputChange.bind(this);
@@ -58,7 +61,7 @@ class LoginSection extends Component<LoginSectionProps, LoginSectionState> {
     }
 
     onToastDismissed() {
-        this.setState({ ...this.state, loginSuccessful: null });
+        this.setState({ ...this.state, loginSuccessful: null, shouldRedirect: this.state.loginSuccessful!! });
     }
 
 
@@ -98,6 +101,10 @@ class LoginSection extends Component<LoginSectionProps, LoginSectionState> {
     }
 
     render() {
+        if (this.state.shouldRedirect) {
+            return <Redirect to="/" />
+        }
+
         return (
             <section id="login-section" className="inside-landing-page-section">
                 <Card elevation={Elevation.THREE}>
@@ -114,8 +121,8 @@ class LoginSection extends Component<LoginSectionProps, LoginSectionState> {
                     </form>
                 </Card>
 
-                {this.state.loginSuccessful === true && (
-                    <Toaster><Toast message="Login successful!" intent={Intent.SUCCESS} onDismiss={this.onToastDismissed} timeout={3000} /></Toaster>
+                {this.state.loginSuccessful && (
+                    <Toaster><Toast message="Login successful! Redirecting.." intent={Intent.SUCCESS} onDismiss={this.onToastDismissed} timeout={1500} /></Toaster>
                 )}
                 {this.state.loginSuccessful === false && (
                     <Toaster><Toast message="Login failed!" intent={Intent.DANGER} onDismiss={this.onToastDismissed} timeout={3000} /></Toaster>

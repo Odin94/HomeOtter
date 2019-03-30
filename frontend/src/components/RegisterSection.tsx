@@ -5,6 +5,7 @@ import {
     FormGroup, InputGroup, Card, Button, Elevation, Toaster, Toast, Intent,
 } from "@blueprintjs/core";
 import { Cookies } from 'react-cookie';
+import { Redirect } from 'react-router';
 
 interface RegisterSectionProps {
     cookies?: Cookies
@@ -15,8 +16,9 @@ interface RegisterSectionState {
     firstName: string,
     lastName: string,
     password: string,
-    submitSuccessful: boolean | null,
-    csrfToken: string
+    registerSuccessful: boolean | null,
+    csrfToken: string,
+    shouldRedirect: boolean
 }
 
 class RegisterSection extends Component<RegisterSectionProps, RegisterSectionState> {
@@ -30,8 +32,9 @@ class RegisterSection extends Component<RegisterSectionProps, RegisterSectionSta
             firstName: "",
             lastName: "",
             password: "",
-            submitSuccessful: null,
+            registerSuccessful: null,
             csrfToken: cookies!!.get('XSRF-TOKEN'),
+            shouldRedirect: false,
         }
 
         this.onInputChange = this.onInputChange.bind(this);
@@ -56,13 +59,13 @@ class RegisterSection extends Component<RegisterSectionProps, RegisterSectionSta
         e.preventDefault();
 
         if (this.validateForm()) {
-            const submitSuccessful = await this.submitForm();
-            this.setState({ ...this.state, submitSuccessful });
+            const registerSuccessful = await this.submitForm();
+            this.setState({ ...this.state, registerSuccessful });
         }
     }
 
     onToastDismissed() {
-        this.setState({ ...this.state, submitSuccessful: null });
+        this.setState({ ...this.state, registerSuccessful: null, shouldRedirect: this.state.registerSuccessful!! });
     }
 
 
@@ -96,6 +99,10 @@ class RegisterSection extends Component<RegisterSectionProps, RegisterSectionSta
     }
 
     render() {
+        if (this.state.shouldRedirect) {
+            return <Redirect to="/" />
+        }
+
         return (
             <section id="register-section" className="inside-landing-page-section">
                 <Card elevation={Elevation.THREE}>
@@ -118,10 +125,10 @@ class RegisterSection extends Component<RegisterSectionProps, RegisterSectionSta
                     </form>
                 </Card>
 
-                {this.state.submitSuccessful === true && (
-                    <Toaster><Toast message="Registration successful!" intent={Intent.SUCCESS} onDismiss={this.onToastDismissed} timeout={3000} /></Toaster>
+                {this.state.registerSuccessful && (
+                    <Toaster><Toast message="Registration successful! Redirecting.." intent={Intent.SUCCESS} onDismiss={this.onToastDismissed} timeout={1500} /></Toaster>
                 )}
-                {this.state.submitSuccessful === false && (
+                {this.state.registerSuccessful === false && (
                     <Toaster><Toast message="Registration failed!" intent={Intent.DANGER} onDismiss={this.onToastDismissed} timeout={3000} /></Toaster>
                 )}
             </section >

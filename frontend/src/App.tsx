@@ -6,7 +6,6 @@ import LoginSection from './components/LoginSection';
 import { withCookies, Cookies } from 'react-cookie';
 import { Switch, Route, RouteComponentProps } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
-import { Divider } from '@blueprintjs/core';
 
 interface AppProps {
   cookies?: Cookies
