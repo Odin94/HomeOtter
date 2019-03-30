@@ -6,6 +6,7 @@ import LoginSection from './components/LoginSection';
 import { Switch, Route, RouteComponentProps } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import User from './models/User';
 
 
 interface AppProps {
@@ -13,7 +14,7 @@ interface AppProps {
 interface AppState {
   csrfToken: string,
   isAuthenticated: boolean,
-  user: any | undefined
+  user?: User
 }
 
 class App extends Component<AppProps, AppState> {
@@ -66,18 +67,18 @@ class App extends Component<AppProps, AppState> {
       <div id="app">
         <BrowserRouter>
           <Switch>
-            <Route exact path='/' render={(_props: RouteComponentProps) => <LandingSection />} />
+            <Route exact path='/' render={(_props: RouteComponentProps) => <LandingSection user={this.state.user} />} />
             <Route path='/register' render={
               (_props: RouteComponentProps) => {
                 return (<div className="section-wrapper">
-                  <LandingSection />
+                  <LandingSection user={this.state.user} />
                   <RegisterSection {...this.props} />
                 </div>);
               }} />
             <Route path='/login' render={
               (_props: RouteComponentProps) => {
                 return (<div className="section-wrapper">
-                  <LandingSection />
+                  <LandingSection user={this.state.user} />
                   <LoginSection {...this.props} />
                 </div>);
               }} />

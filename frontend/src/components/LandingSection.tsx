@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import '../scss/LandingSection.scss';
 
-import HeaderMenu from './HeaderMenu';
+import HeaderMenu from './HeaderMenu/HeaderMenu';
+import User from '../models/User';
 
 interface LandingSectionProps {
-    isAuthenticated: boolean,
-    user: any | undefined
+    user?: User
 }
 
-class LandingSection extends Component {
+class LandingSection extends Component<LandingSectionProps, {}> {
     constructor(props: LandingSectionProps) {
         super(props);
     }
@@ -16,7 +16,7 @@ class LandingSection extends Component {
     render() {
         return (
             <section id="landing-section">
-                <HeaderMenu />
+                <HeaderMenu user={this.props.user} />
             </section>
         );
     }
