@@ -39,7 +39,16 @@ class App extends Component<AppProps, AppState> {
     console.log(Cookies.get());
 
     if (sessionId != undefined) {
-      const response = await fetch(`/user_api/session/${sessionId}`, { method: "POST", credentials: 'include' });
+      const response = await fetch(`/user_api/session/${sessionId}`,
+        {
+          method: "POST",
+          credentials: 'include',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-XSRF-TOKEN': this.state.csrfToken
+          }
+        });
       const body = await response.text();
       console.log("onDidMount: ", body);
       if (body === '') {
