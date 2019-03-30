@@ -85,14 +85,14 @@ class LoginSection extends Component<LoginSectionProps, LoginSectionState> {
 
             response.text()
                 .then((body) => {
-                    console.log(body);
+                    console.log(`LoginResponseText: ${body}`);
                 });
 
-            console.log(response);
+            console.log(`LoginResponse: `, response);
 
             return response.status === 200;
         } catch (err) {
-            console.log(err);
+            console.log(`LoginError: ${err}`);
             return false;
         }
     }

@@ -28,7 +28,7 @@ class App extends Component<AppProps, AppState> {
       user: undefined
     };
 
-    console.log(this.state.csrfToken);
+    console.log(`csrf token: ${this.state.csrfToken}`);
   }
 
   async componentDidMount() {
@@ -37,7 +37,7 @@ class App extends Component<AppProps, AppState> {
 
   async autoLogin() {
     const sessionId = this.props.cookies!!.get('JSESSIONID');
-    console.log(sessionId);
+    console.log(`sessionId: ${sessionId}`);
 
     if (sessionId != undefined) {
       const response = await fetch(`/user_api/session/${sessionId}`, { credentials: 'include' });
@@ -46,7 +46,7 @@ class App extends Component<AppProps, AppState> {
       if (body === '') {
         this.setState(({ isAuthenticated: false }))
       } else {
-        console.log(body);
+        console.log(`sessionBody: `, body);
         this.setState({ isAuthenticated: true, user: JSON.parse(body) })
       }
     }

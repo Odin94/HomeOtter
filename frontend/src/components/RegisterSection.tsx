@@ -90,7 +90,7 @@ class RegisterSection extends Component<RegisterSectionProps, RegisterSectionSta
 
             return response.status === 200;
         } catch (err) {
-            console.log(err);
+            console.log("RegisterError: ", err);
             return false;
         }
     }

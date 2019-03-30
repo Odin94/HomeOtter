@@ -5,6 +5,8 @@ import de.odinmatthias.homeotter.InvalidSessionException
 import de.odinmatthias.homeotter.homeotter_user.model.HomeOtterUser
 import de.odinmatthias.homeotter.homeotter_user.repository.UserRepository
 import org.mindrot.jbcrypt.BCrypt
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
@@ -21,6 +23,8 @@ class UserController(
         private val userRepository: UserRepository,
         private val authenticationManager: AuthenticationManager
 ) {
+    val logger: Logger = LoggerFactory.getLogger(UserController::class.java)
+
     @GetMapping("/users")
     fun getAllUsers(): List<HomeOtterUser> = userRepository.findAll()
 
@@ -34,6 +38,7 @@ class UserController(
 
             return savedUser
         } else {
+            logger.warn("Failed to create user, email already in use!")
             throw EmailAlreadyInUseException()
         }
     }

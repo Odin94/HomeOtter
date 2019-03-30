@@ -70,7 +70,7 @@ class WebSecurityConfig(
     }
 
     private fun successHandler(): AuthenticationSuccessHandler {
-        return AuthenticationSuccessHandler { httpServletRequest, httpServletResponse, authentication ->
+        return AuthenticationSuccessHandler { _, httpServletResponse, authentication ->
             httpServletResponse.writer.append("Authentication success")
             httpServletResponse.writer.append(authentication.name)
             httpServletResponse.status = 200
@@ -78,7 +78,7 @@ class WebSecurityConfig(
     }
 
     private fun failureHandler(): AuthenticationFailureHandler {
-        return AuthenticationFailureHandler { httpServletRequest, httpServletResponse, e ->
+        return AuthenticationFailureHandler { _, httpServletResponse, _ ->
             httpServletResponse.writer.append("Authentication failure")
             httpServletResponse.status = 401
         }
