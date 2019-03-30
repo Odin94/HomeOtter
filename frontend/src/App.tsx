@@ -66,7 +66,7 @@ class App extends Component<AppProps, AppState> {
       <div id="app">
         <BrowserRouter>
           <Switch>
-            <Route exact path='/' component={LandingSection} />
+            <Route exact path='/' render={(_props: RouteComponentProps) => <LandingSection />} />
             <Route path='/register' render={
               (_props: RouteComponentProps) => {
                 return (<div className="section-wrapper">

@@ -10,5 +10,5 @@ import org.springframework.web.bind.annotation.ResponseStatus
 class EmailAlreadyInUseException : RuntimeException()
 
 @ResponseBody
-@ResponseStatus(value = HttpStatus.CONFLICT, reason = "email already in use")
+@ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "session was invalid")
 class InvalidSessionException : RuntimeException()

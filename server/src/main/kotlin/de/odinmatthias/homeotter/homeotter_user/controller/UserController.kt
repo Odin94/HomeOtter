@@ -3,6 +3,8 @@ package de.odinmatthias.homeotter.homeotter_user.controller
 import de.odinmatthias.homeotter.EmailAlreadyInUseException
 import de.odinmatthias.homeotter.InvalidSessionException
 import de.odinmatthias.homeotter.homeotter_user.model.HomeOtterUser
+import de.odinmatthias.homeotter.homeotter_user.model.PublicHomeOtterUser
+import de.odinmatthias.homeotter.homeotter_user.model.toPublicUser
 import de.odinmatthias.homeotter.homeotter_user.repository.UserRepository
 import org.mindrot.jbcrypt.BCrypt
 import org.slf4j.Logger
@@ -44,16 +46,24 @@ class UserController(
     }
 
     @PostMapping("/session/{providedSessionId}")
-    fun getUserFromSession(principal: UsernamePasswordAuthenticationToken,
+    fun getUserFromSession(principal: UsernamePasswordAuthenticationToken?,
                            httpServletRequest: HttpServletRequest,
-                           @PathVariable("providedSessionId") providedSessionId: String): HomeOtterUser {
+                           @PathVariable("providedSessionId") providedSessionId: String): PublicHomeOtterUser {
+        if (principal == null) {
+            logger.warn("Tried to access $providedSessionId without being logged in")
+            throw InvalidSessionException()
+        }
+
         val sessionId = httpServletRequest.requestedSessionId
 
         if (sessionId == providedSessionId) {
             val email = principal.name
-            return userRepository.findRegisteredUserByEmail(email)
+            val foundUser = userRepository.findRegisteredUserByEmail(email)
                     ?: throw UsernameNotFoundException("$email not found")
+
+            return toPublicUser(foundUser)
         } else {
+            logger.warn("Tried to access $providedSessionId with different sessionId: $sessionId")
             throw InvalidSessionException()
         }
     }
