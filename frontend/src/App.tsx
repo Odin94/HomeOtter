@@ -3,12 +3,12 @@ import LandingSection from './components/LandingSection';
 import './scss/App.scss';
 import RegisterSection from './components/RegisterSection';
 import LoginSection from './components/LoginSection';
-import { withCookies, Cookies } from 'react-cookie';
 import { Switch, Route, RouteComponentProps } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
+import Cookies from 'js-cookie';
+
 
 interface AppProps {
-  cookies?: Cookies
 }
 interface AppState {
   csrfToken: string,
@@ -19,10 +19,9 @@ interface AppState {
 class App extends Component<AppProps, AppState> {
   constructor(props: AppProps) {
     super(props);
-    const { cookies } = props;
 
     this.state = {
-      csrfToken: cookies!!.get('XSRF-TOKEN'),
+      csrfToken: Cookies.get('XSRF-TOKEN')!!,
       isAuthenticated: false,
       user: undefined
     };
@@ -31,12 +30,13 @@ class App extends Component<AppProps, AppState> {
   }
 
   async componentDidMount() {
-    this.autoLogin()
+    this.getUser()
   }
 
-  async autoLogin() {
-    const sessionId = this.props.cookies!!.get('JSESSIONID');
+  async getUser() {
+    const sessionId = Cookies.get('JSESSIONID');
     console.log(`sessionId: ${sessionId}`);
+    console.log(Cookies.get());
 
     if (sessionId != undefined) {
       const response = await fetch(`/user_api/session/${sessionId}`, { credentials: 'include' });
@@ -52,6 +52,8 @@ class App extends Component<AppProps, AppState> {
   }
 
   render() {
+    this.getUser()
+    console.log("user: ", this.state.user);
     return (
       <div id="app">
         <BrowserRouter>
@@ -78,4 +80,4 @@ class App extends Component<AppProps, AppState> {
   }
 }
 
-export default withCookies(App);
+export default App;

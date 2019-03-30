@@ -3,7 +3,15 @@ import '../scss/LandingSection.scss';
 
 import HeaderMenu from './HeaderMenu';
 
+interface LandingSectionProps {
+    isAuthenticated: boolean,
+    user: any | undefined
+}
+
 class LandingSection extends Component {
+    constructor(props: LandingSectionProps) {
+        super(props);
+    }
 
     render() {
         return (

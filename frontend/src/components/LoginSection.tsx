@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import '../scss/LoginSection.scss';
+import Cookies from 'js-cookie';
 
 import {
     FormGroup, InputGroup, Card, Button, Elevation, Toaster, Toast, Intent,
 } from "@blueprintjs/core";
-import { Cookies } from 'react-cookie';
 import { Redirect } from 'react-router';
 
 interface LoginSectionProps {
-    cookies?: Cookies
 }
 
 interface LoginSectionState {
@@ -23,13 +22,12 @@ class LoginSection extends Component<LoginSectionProps, LoginSectionState> {
 
     constructor(props: LoginSectionProps) {
         super(props);
-        const { cookies } = props;
 
         this.state = {
             email: "",
             password: "",
             loginSuccessful: null,
-            csrfToken: cookies!!.get('XSRF-TOKEN'),
+            csrfToken: Cookies.get('XSRF-TOKEN')!!,
             shouldRedirect: false,
         };
 
@@ -111,7 +109,7 @@ class LoginSection extends Component<LoginSectionProps, LoginSectionState> {
                     <form onSubmit={this.onSubmit}>
                         <h1>Login</h1>
                         <FormGroup>
-                            <InputGroup name="email" value={this.state.email} onChange={this.onInputChange} leftIcon="envelope" id="login-email-input" placeholder="Email Address" />
+                            <InputGroup name="email" value={this.state.email} onChange={this.onInputChange} leftIcon="envelope" id="login-email" placeholder="Email Address" />
                         </FormGroup>
                         <FormGroup>
                             <InputGroup name="password" value={this.state.password} onChange={this.onInputChange} leftIcon="lock" id="login-password" placeholder="Password" type="password" />

@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import '../scss/RegisterSection.scss';
+import Cookies from 'js-cookie';
 
 import {
     FormGroup, InputGroup, Card, Button, Elevation, Toaster, Toast, Intent,
 } from "@blueprintjs/core";
-import { Cookies } from 'react-cookie';
 import { Redirect } from 'react-router';
 
 interface RegisterSectionProps {
-    cookies?: Cookies
 }
 
 interface RegisterSectionState {
@@ -25,7 +24,6 @@ class RegisterSection extends Component<RegisterSectionProps, RegisterSectionSta
 
     constructor(props: RegisterSectionProps) {
         super(props);
-        const { cookies } = props;
 
         this.state = {
             email: "",
@@ -33,7 +31,7 @@ class RegisterSection extends Component<RegisterSectionProps, RegisterSectionSta
             lastName: "",
             password: "",
             registerSuccessful: null,
-            csrfToken: cookies!!.get('XSRF-TOKEN'),
+            csrfToken: Cookies.get('XSRF-TOKEN')!!,
             shouldRedirect: false,
         }
 
@@ -109,13 +107,13 @@ class RegisterSection extends Component<RegisterSectionProps, RegisterSectionSta
                     <form onSubmit={this.onSubmit}>
                         <h1>Register</h1>
                         <FormGroup>
-                            <InputGroup name="email" value={this.state.email} onChange={this.onInputChange} leftIcon="envelope" id="register-email-input" placeholder="Email Address" />
+                            <InputGroup name="email" value={this.state.email} onChange={this.onInputChange} leftIcon="envelope" id="register-email" placeholder="Email Address" />
                         </FormGroup>
                         <FormGroup>
-                            <InputGroup name="firstName" value={this.state.firstName} onChange={this.onInputChange} leftIcon="person" id="register-firstname-input" placeholder="First Name" />
+                            <InputGroup name="firstName" value={this.state.firstName} onChange={this.onInputChange} leftIcon="person" id="register-firstname" placeholder="First Name" />
                         </FormGroup>
                         <FormGroup>
-                            <InputGroup name="lastName" value={this.state.lastName} onChange={this.onInputChange} leftIcon="person" id="register-lastname-input" placeholder="Last Name" />
+                            <InputGroup name="lastName" value={this.state.lastName} onChange={this.onInputChange} leftIcon="person" id="register-lastname" placeholder="Last Name" />
                         </FormGroup>
                         <FormGroup>
                             <InputGroup name="password" value={this.state.password} onChange={this.onInputChange} leftIcon="lock" id="register-password" placeholder="Password" type="password" />

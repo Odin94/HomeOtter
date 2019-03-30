@@ -1,5 +1,4 @@
 import React from 'react';
-import { CookiesProvider } from 'react-cookie';
 import ReactDOM from 'react-dom';
 import './scss/index.scss';
 import App from './App';
@@ -8,9 +7,7 @@ import "@blueprintjs/core/lib/css/blueprint.css";
 
 
 ReactDOM.render(
-    <CookiesProvider>
-        <App />
-    </CookiesProvider>
+    <App />
     , document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
