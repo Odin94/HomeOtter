@@ -39,7 +39,7 @@ class App extends Component<AppProps, AppState> {
     console.log(Cookies.get());
 
     if (sessionId != undefined) {
-      const response = await fetch(`/user_api/session/${sessionId}`, { credentials: 'include' });
+      const response = await fetch(`/user_api/session/${sessionId}`, { method: "POST", credentials: 'include' });
       const body = await response.text();
       console.log("onDidMount: ", body);
       if (body === '') {
@@ -52,7 +52,6 @@ class App extends Component<AppProps, AppState> {
   }
 
   render() {
-    this.getUser()
     console.log("user: ", this.state.user);
     return (
       <div id="app">
