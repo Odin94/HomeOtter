@@ -6,13 +6,7 @@ import SimpleImage from './SimpleImage'
 import {
     Alignment,
     Button,
-    Classes,
-    H5,
     Navbar,
-    NavbarDivider,
-    NavbarGroup,
-    NavbarHeading,
-    Switch,
     Icon,
 } from "@blueprintjs/core";
 import { Link } from 'react-router-dom';

@@ -6,6 +6,7 @@ import LoginSection from './components/LoginSection';
 import { withCookies, Cookies } from 'react-cookie';
 import { Switch, Route, RouteComponentProps } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
+import { Divider } from '@blueprintjs/core';
 
 interface AppProps {
   cookies?: Cookies
@@ -57,8 +58,20 @@ class App extends Component<AppProps, AppState> {
         <BrowserRouter>
           <Switch>
             <Route exact path='/' component={LandingSection} />
-            <Route path='/register' render={(_props: RouteComponentProps) => <RegisterSection {...this.props} />} />
-            <Route path='/login' render={(_props: RouteComponentProps) => <LoginSection {...this.props} />} />
+            <Route path='/register' render={
+              (_props: RouteComponentProps) => {
+                return (<div className="section-wrapper">
+                  <LandingSection />
+                  <RegisterSection {...this.props} />
+                </div>);
+              }} />
+            <Route path='/login' render={
+              (_props: RouteComponentProps) => {
+                return (<div className="section-wrapper">
+                  <LandingSection />
+                  <LoginSection {...this.props} />
+                </div>);
+              }} />
           </Switch>
         </BrowserRouter>
       </div>

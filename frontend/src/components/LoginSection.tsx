@@ -99,8 +99,8 @@ class LoginSection extends Component<LoginSectionProps, LoginSectionState> {
 
     render() {
         return (
-            <section id="login-section">
-                <Card elevation={Elevation.ONE}>
+            <section id="login-section" className="inside-landing-page-section">
+                <Card elevation={Elevation.THREE}>
                     <form onSubmit={this.onSubmit}>
                         <h1>Login</h1>
                         <FormGroup>

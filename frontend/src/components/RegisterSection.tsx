@@ -97,8 +97,8 @@ class RegisterSection extends Component<RegisterSectionProps, RegisterSectionSta
 
     render() {
         return (
-            <section id="register-section">
-                <Card elevation={Elevation.ONE}>
+            <section id="register-section" className="inside-landing-page-section">
+                <Card elevation={Elevation.THREE}>
                     <form onSubmit={this.onSubmit}>
                         <h1>Register</h1>
                         <FormGroup>
